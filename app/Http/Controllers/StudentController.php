@@ -16,7 +16,9 @@ class StudentController extends Controller
 {
     public function index(): View
     {
-        return view('welcome');
+        return view('welcome', [
+            'students' => Student::paginate(8),
+        ]);
     }
 
     public function store(Request $request): RedirectResponse
@@ -37,6 +39,7 @@ class StudentController extends Controller
                     'parent_contact' => $line['Parent Contact'],
                 ]);
             });
+            session()->flash('success', 'All students\'s data have been successfully uploaded!');
         } else {
 
             $studentsName = Arr::pluck($students, 'name');
@@ -54,6 +57,8 @@ class StudentController extends Controller
                     'parent_contact' => $line['Parent Contact'],
                 ]);
             });
+
+            session()->flash('warning', 'Students\'s data have been successfully uploaded but some has been skipped because it\'s already in records!');
 
         }
 

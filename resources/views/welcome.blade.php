@@ -14,8 +14,10 @@
 </head>
 
 <body class="antialiased">
+
     <main
         class="flex flex-col justify-center w-screen max-w-5xl p-8 mx-auto mt-24 bg-white rounded-md shadow drop-shadow-xl">
+        <x-alert />
         <div class="flex flex-col justify-center w-full h-full">
             <form method="POST" action="{{ route('student.store') }}" enctype="multipart/form-data"
                 class="flex flex-col gap-4">
@@ -27,11 +29,17 @@
                 <x-input :error="__('file_input')" name='file_input' id="file_input" type="file" />
                 <div class="flex justify-center gap-6">
                     <x-button type="submit">UPLOAD</x-button>
-                    <x-button :style="__('secondary')" type="button">CANCEL</x-button>
+                    <a href="{{ route('student.index') }}" class="w-full">
+                        <x-button :style="__('secondary')" type="button">CANCEL</x-button>
+                    </a>
                 </div>
 
             </form>
-            <section>@include('table')</section>
+            @if (!$students->isEmpty())
+                <section>@include('table')</section>
+            @else
+                <p class='my-4 text-lg text-center text-red-500'>Nothing to show yet. Please upload some data! </p>
+            @endif
         </div>
     </main>
 </body>
