@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="{{ str_replace('_', '-', app()->getLocale()) }}">
+<html lang="{{ str_replace('_', '-', app()->getLocale()) }}" class="bg-gray-100">
 
 <head>
     <meta charset="utf-8">
@@ -14,8 +14,9 @@
 </head>
 
 <body class="antialiased">
-    <main class="flex flex-col w-screen h-screen max-w-5xl mx-auto px-2">
-        <div class="flex flex-col w-full h-full justify-center">
+    <main
+        class="flex flex-col justify-center w-screen max-w-5xl p-8 mx-auto mt-24 bg-white rounded-md shadow drop-shadow-xl">
+        <div class="flex flex-col justify-center w-full h-full">
             <form method="POST" action="{{ route('student.store') }}" enctype="multipart/form-data"
                 class="flex flex-col gap-4">
                 @csrf
