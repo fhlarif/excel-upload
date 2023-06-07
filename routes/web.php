@@ -3,7 +3,7 @@
 declare(strict_types=1);
 
 use Illuminate\Support\Facades\Route;
-use App\Http\Controllers\StudentUploadController;
+use App\Http\Controllers\StudentController;
 
 /*
 |--------------------------------------------------------------------------
@@ -16,7 +16,7 @@ use App\Http\Controllers\StudentUploadController;
 |
 */
 
-Route::prefix('/student')->controller(StudentUploadController::class)->name('student.')->group(function () {
+Route::prefix('/student')->controller(StudentController::class)->name('student.')->group(function () {
     Route::get('', 'index')->name('index');
     Route::post('/store', 'store')->name('store');
 });
