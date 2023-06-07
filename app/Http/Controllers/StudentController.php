@@ -4,16 +4,18 @@ declare(strict_types=1);
 
 namespace App\Http\Controllers;
 
-use Arr;
-use Str;
-use FastExcel;
 use App\Models\Student;
 use Illuminate\Http\Request;
+use App\Http\Services\ExcelService;
 use Illuminate\Contracts\View\View;
 use Illuminate\Http\RedirectResponse;
 
 class StudentController extends Controller
 {
+    public function __construct(public ExcelService $excelService)
+    {
+    }
+
     public function index(): View
     {
         return view('welcome', [
@@ -26,41 +28,8 @@ class StudentController extends Controller
         $request->validate([
             'file_input' => 'file|mimes:xlsx',
         ]);
-        $lines = FastExcel::import($request->file_input);
-        $excelNames = Arr::pluck($lines, 'Name');
-        $students = Student::select('name')->distinct('name')->whereIn('name', $excelNames)->get();
 
-        if ($students->isEmpty()) {
-            $lines->map(function ($line) {
-                Student::create([
-                    'name'           => $line['Name'],
-                    'class'          => $line['Class'],
-                    'level'          => $line['Level'],
-                    'parent_contact' => $line['Parent Contact'],
-                ]);
-            });
-            session()->flash('success', 'All students\'s data have been successfully uploaded!');
-        } else {
-
-            $studentsName = Arr::pluck($students, 'name');
-
-            $filtered = $lines->where(function ($line) use ($studentsName) {
-
-                return !Str::contains($line['Name'], $studentsName);
-            });
-
-            $filtered->map(function ($line) {
-                Student::create([
-                    'name'           => $line['Name'],
-                    'class'          => $line['Class'],
-                    'level'          => $line['Level'],
-                    'parent_contact' => $line['Parent Contact'],
-                ]);
-            });
-
-            session()->flash('warning', 'Students\'s data have been successfully uploaded but some has been skipped because it\'s already in records!');
-
-        }
+        $this->excelService->upload($request);
 
         return redirect(route('student.index'));
     }
