@@ -2,6 +2,7 @@
 
 declare(strict_types=1);
 
+use App\Http\Services\ExcelService;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\StudentController;
 
@@ -20,5 +21,9 @@ Route::prefix('/student')->controller(StudentController::class)->name('student.'
     Route::get('', 'index')->name('index');
     Route::post('/store', 'store')->name('store');
 });
+
+Route::get('/download', function (ExcelService $excelService) {
+    return $excelService->download();
+})->name('download');
 
 Route::get('/', fn () => redirect(route('student.index')));

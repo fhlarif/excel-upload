@@ -22,9 +22,14 @@
             <form method="POST" action="{{ route('student.store') }}" enctype="multipart/form-data"
                 class="flex flex-col gap-4">
                 @csrf
-                <x-label :for="__('file_input')" :description="__('Download Excel Template')">
+                <x-label :for="__('file_input')">
                     Upload from File
                 </x-label>
+                <a href="{{ !$students->isEmpty() ? route('download') : asset('storage/testdata.xlsx') }}"
+                    target="_blank"
+                    class="font-medium text-gray-500 underline cursor-pointer hover:text-gray-400 w-fit">
+                    Download Excel Template
+                </a>
 
                 <x-input :error="__('file_input')" name='file_input' id="file_input" type="file" />
                 <div class="flex justify-center gap-6">

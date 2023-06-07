@@ -12,7 +12,7 @@ use Illuminate\Http\Request;
 
 class ExcelService
 {
-    public function upload(Request $request)
+    public function upload(Request $request): void
     {
         $lines = FastExcel::import($request->file_input);
         $excelNames = Arr::pluck($lines, 'Name');
@@ -49,5 +49,24 @@ class ExcelService
             session()->flash('warning', 'Students\'s data have been successfully uploaded but some has been skipped because it\'s already in records!');
 
         }
+    }
+
+    public function download()
+    {
+        $students = Student::select('name', 'class', 'level', 'parent_contact')->limit(3)->get();
+
+        if (!$students->isEmpty()) {
+
+            return FastExcel::data($students)->download('file.xlsx', function ($student) {
+                return [
+                    'Name'           => $student->name,
+                    'Class'          => $student->class,
+                    'Level'          => $student->level,
+                    'Parent Contact' => $student->parent_contact,
+
+                ];
+            });
+        }
+
     }
 }
