@@ -25,8 +25,7 @@
                 <x-label :for="__('file_input')">
                     Upload from File
                 </x-label>
-                <a href="{{ !$students->isEmpty() ? route('download') : asset('storage/testdata.xlsx') }}"
-                    target="_blank"
+                <a href="{{ !$students->isEmpty() ? route('download') : asset('testdata.xlsx') }}" target="_blank"
                     class="font-medium text-gray-500 underline cursor-pointer hover:text-gray-400 w-fit">
                     Download Excel Template
                 </a>
