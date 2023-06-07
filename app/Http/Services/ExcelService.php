@@ -9,6 +9,7 @@ use FastExcel;
 use App\Models\Student;
 use Illuminate\Support\Str;
 use Illuminate\Http\Request;
+use Symfony\Component\HttpFoundation\StreamedResponse;
 
 class ExcelService
 {
@@ -51,22 +52,19 @@ class ExcelService
         }
     }
 
-    public function download()
+    public function download(): StreamedResponse|string
     {
         $students = Student::select('name', 'class', 'level', 'parent_contact')->limit(3)->get();
 
-        if (!$students->isEmpty()) {
+        return FastExcel::data($students)->download('file.xlsx', function ($student) {
+            return [
+                'Name'           => $student->name,
+                'Class'          => $student->class,
+                'Level'          => $student->level,
+                'Parent Contact' => $student->parent_contact,
 
-            return FastExcel::data($students)->download('file.xlsx', function ($student) {
-                return [
-                    'Name'           => $student->name,
-                    'Class'          => $student->class,
-                    'Level'          => $student->level,
-                    'Parent Contact' => $student->parent_contact,
-
-                ];
-            });
-        }
+            ];
+        });
 
     }
 }
