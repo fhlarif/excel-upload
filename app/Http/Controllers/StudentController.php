@@ -26,7 +26,7 @@ class StudentController extends Controller
     public function store(Request $request): RedirectResponse
     {
         $request->validate([
-            'file_input' => 'file|mimes:xlsx',
+            'file_input' => 'required|file|mimes:xlsx',
         ]);
 
         $this->excelService->upload($request);

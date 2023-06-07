@@ -30,7 +30,7 @@
                     Download Excel Template
                 </a>
 
-                <x-input :error="__('file_input')" name='file_input' id="file_input" type="file" />
+                <x-input required :error="__('file_input')" name='file_input' id="file_input" type="file" />
                 <div class="flex justify-center gap-6">
                     <x-button type="submit">UPLOAD</x-button>
                     <a href="{{ route('student.index') }}" class="w-full">
